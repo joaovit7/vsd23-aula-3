@@ -36,7 +36,22 @@ const product = [
    })
    }
 
-   product.push({
+    const existsdescription = product.find(product => product.descrição)
+    if (existsdescription) {
+    return response.status(400).json({
+    error: 'produto ja cadastrado'
+    })
+
+    
+   }
+const product ={
+  id,
+  descricao,
+  valor,
+  qtde,
+}
+
+    product.push({
     id,
     descricao,
     valor,
@@ -44,8 +59,49 @@ const product = [
    })
     return response.json({ data: product})
 },
+  async getlistofcart(request, response) {
+  return response.json({ data: products })
+},
 
-async hello2(request, response) {
-return response.json({ msg: 'hello world 2'})
+ async createusercart(request,response) {
+
+ const {item} = request.body
+
+  for (const product of item) {
+  const productexists = products.find(prd => prd.id === product.id )
+  if(productexists) {
+  return response.status(400).json({
+  error: 'produto não encontrado'
+  })
 }
+
+if(productexists.qtde < product.qtde) {
+return responde.status(400).json({
+  error: 'quantidade não disponivel'
+})
 }
+
+   const useritems = {
+   productid: productexists.id,
+   descricao: productexists.descricao,
+   qtde: product.qtde,
+   valor: product.qtde = productexists.valor
+}
+
+usercart.push(useritems)
+
+const index = products.findindex(idx => idx.id === product.id)
+products[index].qtde = products[index].qtde - product.qtde
+
+return response.json({
+  order: useritems,
+  steck: products 
+})
+}
+
+
+
+ return response.json({ data: true})
+}
+   }
+
